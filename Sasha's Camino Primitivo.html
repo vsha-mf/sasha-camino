@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///Users/vsha_mf/Downloads/sasha_camino_primitivo.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sasha's Camino Primitivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Sasha&#39;s Camino Primitivo_files/css2" rel="stylesheet">
+<style>
+:root {
+  --cream: #f5f0e8;
+  --parchment: #ede5d0;
+  --ink: #2a1f0e;
+  --ink-light: #5a4a30;
+  --trail: #c0392b;
+  --galicia: #2e7d52;
+  --asturias: #5b4a8a;
+  --madrid: #b8860b;
+  --gold: #c9a84c;
+  --border: #c8b89a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+header {
+  text-align: center;
+  padding: 2.5rem 2rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to bottom, #ede5d0, var(--cream));
+}
+header::before {
+  content: '✦  ✦  ✦';
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 0.9rem;
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+.subtitle {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.header-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+  align-items: center;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--trail);
+  display: block;
+}
+.stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.divider { width: 1px; height: 36px; background: var(--border); }
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  height: calc(100vh - 185px);
+  min-height: 500px;
+}
+@media (max-width: 860px) {
+  .main { grid-template-columns: 1fr; height: auto; }
+  #map-panel { height: 55vw; min-height: 300px; }
+  .sidebar { max-height: 55vh; border-left: none; border-top: 1px solid var(--border); }
+}
+
+#map-panel {
+  position: relative;
+  background: #e8dfc8;
+  overflow: hidden;
+}
+#map-panel svg { width: 100%; height: 100%; display: block; }
+
+.map-tip {
+  position: absolute;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 7px 11px;
+  font-size: 12px;
+  pointer-events: none;
+  display: none;
+  z-index: 10;
+  max-width: 170px;
+  box-shadow: 2px 3px 10px rgba(0,0,0,0.13);
+}
+.map-tip strong { display: block; color: var(--ink); margin-bottom: 1px; font-weight: 500; }
+.map-tip span { color: var(--ink-light); font-size: 10px; }
+
+.sidebar {
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+  overflow: hidden;
+}
+.sidebar-head {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink);
+}
+.count-badge {
+  font-size: 10px;
+  background: var(--trail);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.filters {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.fb {
+  font-size: 10px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink-light);
+  cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  transition: all 0.12s;
+}
+.fb:hover { background: var(--parchment); }
+.fb.on { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+#elist {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.6rem;
+}
+.ec {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  margin-bottom: 3px;
+  transition: background 0.1s, border-color 0.1s;
+}
+.ec:hover { background: var(--parchment); border-color: var(--border); }
+.ec.active { background: var(--parchment); border-left: 3px solid var(--trail); border-color: var(--border); }
+.ec-top { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: 2px; }
+.nb {
+  font-size: 9px;
+  font-weight: 500;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--trail);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.nb.cur { background: var(--galicia); }
+.en { font-size: 11px; font-weight: 500; color: var(--ink); }
+.rp {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 20px;
+}
+.rm { background: #fdecc0; color: #7a5c00; }
+.ra { background: #e8e3f5; color: #3d2a7a; }
+.rg { background: #d4ede0; color: #1a5c38; }
+.esub { font-size: 10px; color: var(--ink-light); margin-left: 23px; margin-bottom: 2px; }
+.eprev { font-size: 10px; color: var(--ink-light); line-height: 1.5; margin-left: 23px; }
+
+/* Detail modal */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(42,31,14,0.55);
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+#modal.open { display: flex; }
+.modal-inner {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.22);
+}
+.modal-head {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--parchment);
+  position: sticky;
+  top: 0;
+}
+.modal-head-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+.modal-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--trail);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500;
+  flex-shrink: 0; margin-top: 3px;
+}
+.modal-num.cur { background: var(--galicia); }
+.modal-loc {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.modal-sub { font-size: 11px; color: var(--ink-light); margin-left: 38px; }
+.modal-close {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; color: var(--ink-light); line-height: 1;
+}
+.modal-close:hover { color: var(--ink); }
+.modal-body { padding: 1.25rem 1.5rem; }
+.stats-row { display: flex; gap: 10px; margin-bottom: 1.25rem; }
+.mstat {
+  background: var(--parchment);
+  border-radius: 4px;
+  padding: 8px 12px;
+  flex: 1;
+  text-align: center;
+}
+.mstat-val { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--ink); display: block; }
+.mstat-val.go { color: var(--galicia); }
+.mstat-lbl { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); }
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.highlights {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+.highlights li {
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.65;
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 2px;
+}
+.highlights li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+.cond-text { font-size: 12px; color: var(--ink); line-height: 1.6; margin-bottom: 1rem; }
+.modal-quote {
+  border-left: 3px solid var(--trail);
+  padding-left: 12px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-light);
+  line-height: 1.65;
+}
+.modal-quote.cur-q { border-color: var(--galicia); }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 11px;
+  color: var(--ink-light);
+  letter-spacing: 0.08em;
+  border-top: 1px solid var(--border);
+  background: var(--parchment);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Sasha's Camino Primitivo</h1>
+  <p class="subtitle">Madrid → Oviedo → Santiago de Compostela &nbsp;•&nbsp; May 2025</p>
+  <div class="header-stats">
+    <div class="stat"><span class="stat-num">30</span><span class="stat-label">diary entries</span></div>
+    <div class="divider"></div>
+    <div class="stat"><span class="stat-num">~320</span><span class="stat-label">km walked</span></div>
+    <div class="divider"></div>
+    <div class="stat"><span class="stat-num">9</span><span class="stat-label">days on foot</span></div>
+    <div class="divider"></div>
+    <div class="stat"><span class="stat-num">~20</span><span class="stat-label">km to Santiago</span></div>
+  </div>
+</header>
+
+<div class="main">
+  <div id="map-panel">
+    <div class="map-tip" id="tip" style="display: none; left: 599px; top: 148.641px;"><strong>21. Alto do Acevo</strong><span>May 9, 6:36 AM · into Galicia</span></div>
+    <svg viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <!-- Ocean background -->
+      <rect width="560" height="560" fill="#d6e8f0" opacity="0.4"></rect>
+
+      <!-- Spain body -->
+      <path d="M70,105 L90,82 L130,76 L190,70 L250,66 L310,68 L365,72 L415,82 L455,102 L465,132 L460,172 L455,212 L445,252 L425,282 L405,312 L375,342 L345,364 L315,380 L285,390 L255,385 L225,373 L195,353 L165,333 L135,310 L115,283 L95,255 L77,223 L65,187 L63,153 Z" fill="#ddd5b8" stroke="#b8a880" stroke-width="1.2"></path>
+
+      <!-- Portugal -->
+      <path d="M70,105 L63,153 L65,187 L77,223 L95,255 L110,275 L120,265 L125,235 L123,195 L120,155 L115,115 L105,90 Z" fill="#cec8a8" stroke="#b8a880" stroke-width="0.8" opacity="0.7"></path>
+
+      <!-- Cantabrian Sea label -->
+      <text x="240" y="62" font-size="10" fill="#5a8aaa" text-anchor="middle" font-family="Georgia, serif" font-style="italic" opacity="0.8">Mar Cantábrico</text>
+
+      <!-- Atlantic label -->
+      <text x="40" y="260" font-size="9" fill="#5a8aaa" text-anchor="middle" font-family="Georgia, serif" font-style="italic" opacity="0.7" transform="rotate(-90,40,260)">Atlantic</text>
+
+      <!-- Train line: Madrid to Oviedo -->
+      <line x1="318" y1="335" x2="255" y2="118" stroke="#b8860b" stroke-width="1.8" stroke-dasharray="7,4" opacity="0.6"></line>
+      <text x="300" y="230" font-size="8" fill="#b8860b" text-anchor="middle" transform="rotate(-70,300,230)" opacity="0.8" font-style="italic">tren</text>
+
+      <!-- Camino Primitivo full walking route -->
+      <polyline points="255,118 234,120 216,122 202,126 188,130 178,134 166,140 154,145 142,151 130,157 118,165 108,173 97,179 86,183 74,188 62,198 50,210" fill="none" stroke="#c0392b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"></polyline>
+
+      <!-- Final 20km dashed to Santiago -->
+      <polyline points="50,210 40,222" fill="none" stroke="#2e7d52" stroke-width="2.5" stroke-dasharray="5,3" stroke-linecap="round" opacity="0.9"></polyline>
+
+      <!-- Region boundary Asturias/Galicia -->
+      <line x1="142" y1="112" x2="142" y2="188" stroke="#888" stroke-width="0.7" stroke-dasharray="3,3" opacity="0.4"></line>
+      <text x="178" y="108" font-size="9" fill="#5b4a8a" text-anchor="middle" font-style="italic" opacity="0.75">Asturias</text>
+      <text x="105" y="108" font-size="9" fill="#2e7d52" text-anchor="middle" font-style="italic" opacity="0.75">Galicia</text>
+
+      <!-- Compass rose -->
+      <g transform="translate(510,55)">
+        <circle r="18" fill="#ede5d0" stroke="#c8b89a" stroke-width="1"></circle>
+        <line x1="0" y1="-12" x2="0" y2="12" stroke="#2a1f0e" stroke-width="1"></line>
+        <line x1="-12" y1="0" x2="12" y2="0" stroke="#2a1f0e" stroke-width="1"></line>
+        <text x="0" y="-14" font-size="8" fill="#2a1f0e" text-anchor="middle" font-weight="bold">N</text>
+        <polygon points="0,-8 3,0 0,2 -3,0" fill="#c0392b"></polygon>
+      </g>
+
+      <!-- Scale bar -->
+      <g transform="translate(430,500)">
+        <line x1="0" y1="0" x2="60" y2="0" stroke="#5a4a30" stroke-width="1.2"></line>
+        <line x1="0" y1="-4" x2="0" y2="4" stroke="#5a4a30" stroke-width="1.2"></line>
+        <line x1="60" y1="-4" x2="60" y2="4" stroke="#5a4a30" stroke-width="1.2"></line>
+        <text x="30" y="-7" font-size="8" fill="#5a4a30" text-anchor="middle">~60 km</text>
+      </g>
+
+      <!-- Legend -->
+      <g transform="translate(390,140)">
+        <rect width="115" height="78" rx="3" fill="#f5f0e8" stroke="#c8b89a" stroke-width="0.8" opacity="0.9"></rect>
+        <line x1="10" y1="18" x2="28" y2="18" stroke="#c0392b" stroke-width="2.5"></line>
+        <text x="33" y="22" font-size="9" fill="#2a1f0e">walking route</text>
+        <line x1="10" y1="34" x2="28" y2="34" stroke="#b8860b" stroke-width="1.8" stroke-dasharray="5,3"></line>
+        <text x="33" y="38" font-size="9" fill="#2a1f0e">train</text>
+        <line x1="10" y1="50" x2="28" y2="50" stroke="#2e7d52" stroke-width="2" stroke-dasharray="4,2"></line>
+        <text x="33" y="54" font-size="9" fill="#2a1f0e">~20km to go</text>
+        <circle cx="18" cy="66" r="5" fill="#c0392b" stroke="white" stroke-width="1.2"></circle>
+        <text x="33" y="70" font-size="9" fill="#2a1f0e">diary entry</text>
+      </g>
+
+      <!-- City labels -->
+      <text x="318" y="328" font-size="9" fill="#5a4a30" text-anchor="middle" font-style="italic">Madrid</text>
+      <text x="255" y="112" font-size="9" fill="#5a4a30" text-anchor="middle">Oviedo</text>
+      <text x="75" y="183" font-size="8" fill="#5a4a30" text-anchor="middle">Lugo</text>
+      <text x="167" y="134" font-size="8" fill="#5a4a30" text-anchor="middle">Fonsagrada</text>
+      <text x="38" y="232" font-size="9" fill="#2e7d52" text-anchor="middle" font-weight="bold" font-family="Georgia, serif">Santiago ★</text>
+
+      <!-- Entry dots group -->
+      <g id="edots"><circle cx="318" cy="335" r="7" fill="#b8860b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="318" y="339" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">1</text><circle cx="255" cy="118" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="255" y="122" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">2</text><circle cx="253" cy="121" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="253" y="125" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">3</text><circle cx="234" cy="120" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="234" y="124" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">4</text><circle cx="228" cy="122" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="228" y="126" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">5</text><circle cx="216" cy="122" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="216" y="126" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">6</text><circle cx="215" cy="124" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="215" y="128" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">7</text><circle cx="214" cy="126" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="214" y="130" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">8</text><circle cx="206" cy="123" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="206" y="127" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">9</text><circle cx="202" cy="126" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="202" y="130" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">10</text><circle cx="188" cy="130" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="188" y="134" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">11</text><circle cx="187" cy="133" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="187" y="137" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">12</text><circle cx="177" cy="134" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="177" y="138" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">13</text><circle cx="166" cy="140" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="166" y="144" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">14</text><circle cx="156" cy="145" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="156" y="149" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">15</text><circle cx="155" cy="147" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="155" y="151" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">16</text><circle cx="144" cy="140" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="144" y="144" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">17</text><circle cx="134" cy="143" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="134" y="147" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">18</text><circle cx="127" cy="148" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="127" y="152" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">19</text><circle cx="120" cy="153" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="120" y="157" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">20</text><circle cx="110" cy="165" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="110" y="169" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">21</text><circle cx="99" cy="169" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="99" y="173" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">22</text><circle cx="97" cy="172" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="97" y="176" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">23</text><circle cx="90" cy="175" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="90" y="179" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">24</text><circle cx="83" cy="179" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="83" y="183" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">25</text><circle cx="81" cy="182" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="81" y="186" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">26</text><circle cx="74" cy="185" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="74" y="189" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">27</text><circle cx="68" cy="189" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="68" y="193" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">28</text><circle cx="74" cy="183" r="5.5" fill="#c0392b" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="74" y="187" font-size="6.5" fill="white" text-anchor="middle" font-weight="500">29</text><circle cx="62" cy="198" r="9" fill="#2e7d52" stroke="white" stroke-width="1.5" style="cursor: pointer; opacity: 1;"></circle><text x="62" y="202" font-size="8" fill="white" text-anchor="middle" font-weight="500">30</text><circle cx="62" cy="198" r="9" fill="none" stroke="#2e7d52" stroke-width="1.8"><animate attributeName="r" values="9;22;9" dur="2s" repeatCount="indefinite"></animate><animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"></animate></circle></g>
+    </svg>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <span class="sidebar-title">Journey diary</span>
+      <span class="count-badge">30 entries</span>
+    </div>
+    <div class="filters">
+      <button class="fb on" onclick="filter(&#39;all&#39;,this)">All</button>
+      <button class="fb" onclick="filter(&#39;Madrid&#39;,this)">🚂 Madrid</button>
+      <button class="fb" onclick="filter(&#39;Asturias&#39;,this)">Asturias</button>
+      <button class="fb" onclick="filter(&#39;Galicia&#39;,this)">Galicia</button>
+    </div>
+    <div id="elist">
+    <div class="ec" onclick="showModal(0)">
+      <div class="ec-top">
+        <div class="nb">1</div>
+        <span class="en">Chamartín, Madrid</span>
+        <span class="rp rm">Madrid</span>
+      </div>
+      <div class="esub">May 2, 4:29 AM · night train north</div>
+      <div class="eprev">Childhood Spanish words alive in the heart. Night train north.…</div>
+    </div>
+    <div class="ec" onclick="showModal(1)">
+      <div class="ec-top">
+        <div class="nb">2</div>
+        <span class="en">Oviedo</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 2, 9:13 PM · jamón queue</div>
+      <div class="eprev">Queue for jamón. No number. Couple saves day. Number 69.…</div>
+    </div>
+    <div class="ec" onclick="showModal(2)">
+      <div class="ec-top">
+        <div class="nb">3</div>
+        <span class="en">Santa María del Naranco</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 3, 4:08 AM · 9th century church</div>
+      <div class="eprev">9th century church. US zombie apocalypse from an Asturian bar.…</div>
+    </div>
+    <div class="ec" onclick="showModal(3)">
+      <div class="ec-top">
+        <div class="nb">4</div>
+        <span class="en">Grado</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 4, 1:33 AM · Day 1 complete!</div>
+      <div class="eprev">Пончо работает. Ноги парят. Лошади. Две тётки-волонтёры.…</div>
+    </div>
+    <div class="ec" onclick="showModal(4)">
+      <div class="ec-top">
+        <div class="nb">5</div>
+        <span class="en">San Marcelo</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 4, 4:00 AM · knees object</div>
+      <div class="eprev">Вверх-вверх-вниз. Knees are against it.…</div>
+    </div>
+    <div class="ec" onclick="showModal(5)">
+      <div class="ec-top">
+        <div class="nb">6</div>
+        <span class="en">Salas</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 4, 11:47 AM · life lessons</div>
+      <div class="eprev">Урок первый: носки менять каждые 10-12 км.…</div>
+    </div>
+    <div class="ec" onclick="showModal(6)">
+      <div class="ec-top">
+        <div class="nb">7</div>
+        <span class="en">Albergue Municipal Salas</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 4, 10:12 PM · legs done</div>
+      <div class="eprev">Ноги переходились. Stay or crawl on?…</div>
+    </div>
+    <div class="ec" onclick="showModal(7)">
+      <div class="ec-top">
+        <div class="nb">8</div>
+        <span class="en">Albergue Municipal Salas</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 5, 1:23 AM · КОХОНЕС</div>
+      <div class="eprev">Two fierce smokers turn out to speak Valencian. КОХОНЕС.…</div>
+    </div>
+    <div class="ec" onclick="showModal(8)">
+      <div class="ec-top">
+        <div class="nb">9</div>
+        <span class="en">La Espina</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 5, 5:16 AM · cow portrait</div>
+      <div class="eprev">Ноги починил кофе. Photographed cow backside.…</div>
+    </div>
+    <div class="ec" onclick="showModal(9)">
+      <div class="ec-top">
+        <div class="nb">10</div>
+        <span class="en">Tineo</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 6, 1:37 AM · wine philosophy</div>
+      <div class="eprev">Wine under €2.50 — finish yourself. Local Tempranillo wins. No ha…</div>
+    </div>
+    <div class="ec" onclick="showModal(10)">
+      <div class="ec-top">
+        <div class="nb">11</div>
+        <span class="en">Albergue de Borres</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 6, 11:07 AM · forgotten poncho</div>
+      <div class="eprev">Забыл пончо! Fog like Borodino. Asturian cider. Werner Herzog.…</div>
+    </div>
+    <div class="ec" onclick="showModal(11)">
+      <div class="ec-top">
+        <div class="nb">12</div>
+        <span class="en">Albergue de Borres</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 6, 11:52 PM · Germans at 1am</div>
+      <div class="eprev">Немцы уходят в ночь. Lying alone. Hungry.…</div>
+    </div>
+    <div class="ec" onclick="showModal(12)">
+      <div class="ec-top">
+        <div class="nb">13</div>
+        <span class="en">Los Hospitales</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 7, 2:08 AM · THE fork</div>
+      <div class="eprev">The fork: 24 km mountain route vs 14 km easy. Chooses 24.…</div>
+    </div>
+    <div class="ec" onclick="showModal(13)">
+      <div class="ec-top">
+        <div class="nb">14</div>
+        <span class="en">Camino Primitivo, Allande</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 7, 3:59 AM · cappuccino fog</div>
+      <div class="eprev">Adam &amp; Hellen saved him. Valleys like cappuccino with fog.…</div>
+    </div>
+    <div class="ec" onclick="showModal(14)">
+      <div class="ec-top">
+        <div class="nb">15</div>
+        <span class="en">Albergue de Berducedo</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 7, 10:48 AM · WE MADE IT</div>
+      <div class="eprev">We fucking made it. Snowball gale. Dreamed of beer for 12 km.…</div>
+    </div>
+    <div class="ec" onclick="showModal(15)">
+      <div class="ec-top">
+        <div class="nb">16</div>
+        <span class="en">Albergue de Berducedo</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 8, 1:18 AM · pig scare</div>
+      <div class="eprev">Mission: waterproofing. Yesterday the pig didn't eat him — only s…</div>
+    </div>
+    <div class="ec" onclick="showModal(16)">
+      <div class="ec-top">
+        <div class="nb">17</div>
+        <span class="en">La Mesa, Grandas de Salime</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 8, 3:46 AM · wetsuit rain</div>
+      <div class="eprev">Walking like in a wet wetsuit. Tractor shelter. Given a poncho.…</div>
+    </div>
+    <div class="ec" onclick="showModal(17)">
+      <div class="ec-top">
+        <div class="nb">18</div>
+        <span class="en">Embalse de Salime</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 8, 9:12 AM · lake &amp; horses</div>
+      <div class="eprev">1.5 km to shelter. Championship beauty despite rain. Horses loved…</div>
+    </div>
+    <div class="ec" onclick="showModal(18)">
+      <div class="ec-top">
+        <div class="nb">19</div>
+        <span class="en">Sierra La Cuesta</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 8, 1:28 PM · giant slugs</div>
+      <div class="eprev">Coal-black giant slugs. Rolls into ball like a typewriter key.…</div>
+    </div>
+    <div class="ec" onclick="showModal(19)">
+      <div class="ec-top">
+        <div class="nb">20</div>
+        <span class="en">Malneira</span>
+        <span class="rp ra">Asturias</span>
+      </div>
+      <div class="esub">May 9, 2:30 AM · existential crisis</div>
+      <div class="eprev">Внезапно понял: стал обывателем. Coffee. Steinbeck. Poncho.…</div>
+    </div>
+    <div class="ec" onclick="showModal(20)">
+      <div class="ec-top">
+        <div class="nb">21</div>
+        <span class="en">Alto do Acevo</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">May 9, 6:36 AM · into Galicia</div>
+      <div class="eprev">Crossed into Galicia. Met Andreas the bouncy German.…</div>
+    </div>
+    <div class="ec" onclick="showModal(21)">
+      <div class="ec-top">
+        <div class="nb">22</div>
+        <span class="en">Fonsagrada</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">May 9, 3:31 PM · devil's arrow</div>
+      <div class="eprev">Devil's waymark arrow. Two old ladies. Magic word. Octopus.…</div>
+    </div>
+    <div class="ec" onclick="showModal(22)">
+      <div class="ec-top">
+        <div class="nb">23</div>
+        <span class="en">O Pan de Iria, Fonsagrada</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">May 10, 1:33 AM · bakery dawn</div>
+      <div class="eprev">Galicia law: no blankets provided. Mountain fork chosen again.…</div>
+    </div>
+    <div class="ec" onclick="showModal(23)">
+      <div class="ec-top">
+        <div class="nb">24</div>
+        <span class="en">Real Hospital de Montouto</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">May 10, 5:09 AM · thinking</div>
+      <div class="eprev">You think I'm walking and not thinking. You're wrong. I'm thinkin…</div>
+    </div>
+    <div class="ec" onclick="showModal(24)">
+      <div class="ec-top">
+        <div class="nb">25</div>
+        <span class="en">Cádabo</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">May 10, 12:31 PM · SPQR &amp; beer</div>
+      <div class="eprev">Bar. Beer. Finished SPQR. Augustus = Trump.…</div>
+    </div>
+    <div class="ec" onclick="showModal(25)">
+      <div class="ec-top">
+        <div class="nb">26</div>
+        <span class="en">Cádabo — albergue</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">Yesterday, 12:41 AM · СКОТСТВО</div>
+      <div class="eprev">No outlets. Laptop fell asleep. СКОТСТВО!…</div>
+    </div>
+    <div class="ec" onclick="showModal(26)">
+      <div class="ec-top">
+        <div class="nb">27</div>
+        <span class="en">Castroverde</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">Yesterday, 3:57 AM · magnificent horses</div>
+      <div class="eprev">Без гор скучно. But magnificent horses.…</div>
+    </div>
+    <div class="ec" onclick="showModal(27)">
+      <div class="ec-top">
+        <div class="nb">28</div>
+        <span class="en">Fazai</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">Yesterday, 9:07 AM · cast iron backpack</div>
+      <div class="eprev">Backpack like cast iron ingots. 1.5 hrs to Lugo.…</div>
+    </div>
+    <div class="ec" onclick="showModal(28)">
+      <div class="ec-top">
+        <div class="nb">29</div>
+        <span class="en">Lugo</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">Yesterday, 1:02 PM</div>
+      <div class="eprev">Last 5 km: superhuman effort. Thunderstorm.…</div>
+    </div>
+    <div class="ec active" onclick="showModal(29)">
+      <div class="ec-top">
+        <div class="nb cur">30</div>
+        <span class="en">A Ponte Ferreira</span>
+        <span class="rp rg">Galicia</span>
+      </div>
+      <div class="esub">Today · LATEST — 1h ago</div>
+      <div class="eprev">Ноги болят везде. Adam, Hellen, Simon, Kris. Arriving Santiago Fr…</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div id="modal" class="">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-head-row">
+        <div class="modal-num" id="m-num">21</div>
+        <div class="modal-loc" id="m-loc">Alto do Acevo</div>
+      </div>
+      <div class="modal-sub" id="m-sub"><span class="rp rg">Galicia</span> &nbsp;May 9, 6:36 AM · into Galicia</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="m-body">
+    <div class="stats-row">
+      <div class="mstat"><span class="mstat-val">Border crossing</span><span class="mstat-lbl">distance</span></div>
+      <div class="mstat"><span class="mstat-val">~165 km</span><span class="mstat-lbl">to Santiago</span></div>
+    </div>
+    <p class="section-label">Highlights</p>
+    <ul class="highlights"><li>Crossed the Asturias → Galicia border — felt a «tide going out»</li><li>Met Andreas (German, introduced himself as such)</li><li>Andreas: walking Porto → Santiago → Bilbao — for fun</li><li>Told him about food a few km ahead — answering Sasha's complaints</li><li>Offered to open a can of beer</li><li>«Хорошие люди — словно сговорились ломануться сюда»</li></ul>
+    <p class="section-label">Condition</p>
+    <p class="cond-text">Tired. Food ahead.</p>
+    <p class="section-label">Quote</p>
+    <blockquote class="modal-quote">«Хорошие люди они словно сговорились ломануться сюда»</blockquote></div>
+  </div>
+</div>
+
+<footer>
+  Camino Primitivo • May 2025 • Madrid → Oviedo → Santiago de Compostela • ~320 km on foot
+</footer>
+
+<script>
+const ALL = [
+  {num:1,loc:"Chamartín, Madrid",sub:"May 2, 4:29 AM · night train north",cx:318,cy:335,region:"Madrid",rc:"rm",
+   prev:"Childhood Spanish words alive in the heart. Night train north.",
+   hl:["Night train Madrid → Oviedo","Childhood place-names resurface: Guadalajara, Huesca, Aranjuez","Slightly embarrassed by his own sentimentality"],
+   cond:"Nostalgic. Excited.",
+   quote:"«Вот не думал, что слова из детства останутся, как класов пепел, в миокарде-перикарде»",
+   km:"Train",togo:"~900 km to Santiago"},
+
+  {num:2,loc:"Oviedo",sub:"May 2, 9:13 PM · jamón queue",cx:255,cy:118,region:"Asturias",rc:"ra",
+   prev:"Queue for jamón. No number. Couple saves day. Number 69.",
+   hl:["Bewildered in the jamón queue — forgot to take a number","A couple rescued him, wife fetched number 69","Another woman with baby helped him choose","Compares patient queue to Russians deciding how many vodka bottles to buy"],
+   cond:"Amused. Fed. Jamón acquired.",
+   quote:"«В конце концов я выбрал подешевле но не самый дешёвый — чтоб не упасть лицом в грязь»",
+   km:"Oviedo arrival",togo:"~350 km"},
+
+  {num:3,loc:"Santa María del Naranco",sub:"May 3, 4:08 AM · 9th century church",cx:253,cy:121,region:"Asturias",rc:"ra",
+   prev:"9th century church. US zombie apocalypse from an Asturian bar.",
+   hl:["Pre-Romanesque church above Oviedo — built 842 AD","Watching US news from a bar: «zombie apocalypse in full swing»","«Lord, have mercy on us»"],
+   cond:"Reflective. Concerned about the US.",
+   quote:"«From a bar in Asturias, it looks like a zombie apocalypse is in full swing in the U.S. Lord, have mercy on us»",
+   km:"Pre-walk, Oviedo",togo:"~340 km"},
+
+  {num:4,loc:"Grado",sub:"May 4, 1:33 AM · Day 1 complete!",cx:234,cy:120,region:"Asturias",rc:"ra",
+   prev:"Пончо работает. Ноги парят. Лошади. Две тётки-волонтёры.",
+   hl:["Day 1: ~20 km walked in constant rain","Poncho works! Feet never touched the boots — no blisters","Had thought about stopping halfway — didn't","Horses with foals: mares grazing, foals leaping about","Two lovely volunteer aunties (Spanish + Dutch) waiting at the albergue","Tried a joke about a stickup at the Spanish bank — nearly got shot"],
+   cond:"Победоносный. Dry. Feet intact.",
+   quote:"«Ноги нигде не касались ботинок и парили в невесомости. Никто никого не натирал»",
+   km:"~20 km walked",togo:"~330 km"},
+
+  {num:5,loc:"San Marcelo",sub:"May 4, 4:00 AM · knees object",cx:228,cy:122,region:"Asturias",rc:"ra",
+   prev:"Вверх-вверх-вниз. Knees are against it.",
+   hl:["Relief: up-up-down — then up again","Knees registering a formal complaint","«Потроха за» — guts are in favour though"],
+   cond:"Knees unhappy. Still walking.",
+   quote:"«Little did I know: вверх-вверх-вниз… и увы опять вниз. Колени против»",
+   km:"Early morning",togo:"~320 km"},
+
+  {num:6,loc:"Salas",sub:"May 4, 11:47 AM · life lessons",cx:216,cy:122,region:"Asturias",rc:"ra",
+   prev:"Урок первый: носки менять каждые 10-12 км.",
+   hl:["Lesson 1: change socks every 10-12 km — more rain = shorter interval","Lesson 2: municipal albergue is worse than private","Some companions took private albergues; he went municipal","«Too painful to talk about»"],
+   cond:"Промок. Learning.",
+   quote:"«Жизнь преподаёт ценные уроки, оплаченные омрачёнными радостями и ужасными разочарованиями»",
+   km:"~20 km",togo:"~310 km"},
+
+  {num:7,loc:"Albergue Municipal Salas",sub:"May 4, 10:12 PM · legs done",cx:215,cy:124,region:"Asturias",rc:"ra",
+   prev:"Ноги переходились. Stay or crawl on?",
+   hl:["Prophecy fulfilled: legs have walked themselves out","Dilemma: rest day or continue?","Decides to wait till morning — «maybe legs will dissolve themselves»"],
+   cond:"Horizontal. Uncertain.",
+   quote:"«Может ноги сами собой рассосутся»",
+   km:"Rest",togo:"~310 km"},
+
+  {num:8,loc:"Albergue Municipal Salas",sub:"May 5, 1:23 AM · КОХОНЕС",cx:214,cy:126,region:"Asturias",rc:"ra",
+   prev:"Two fierce smokers turn out to speak Valencian. КОХОНЕС.",
+   hl:["Two savage-looking men smoking on terrace — actually Valencian speakers","«Спикаете на каталонском? — Хахаха, на валенсиансом, почти попал»","КОХОНЕС — word of the day","Elderly British couple: toast, tea, Netflix-serial English","Traveller on his 6th different Camino","People on Camino Francés walk it dozens of times — he doesn't understand"],
+   cond:"Sociable. Linguistic discoveries.",
+   quote:"«Логично — быть чёрной овцой требует кохонес»",
+   km:"Night / morning",togo:"~310 km"},
+
+  {num:9,loc:"La Espina",sub:"May 5, 5:16 AM · cow portrait",cx:206,cy:123,region:"Asturias",rc:"ra",
+   prev:"Ноги починил кофе. Photographed cow backside.",
+   hl:["Rumours of leg mutiny — exaggerated (one cup of coffee fixed it)","7 km behind, better not think about what's ahead","«Сфотографировал коровью задницу в портретном режиме. Всем бы такие портреты»"],
+   cond:"Relatively functional. Photographer.",
+   quote:"«Сфотографировал коровью задницу в портретном режиме. Всем бы такие портреты»",
+   km:"Morning walk",togo:"~295 km"},
+
+  {num:10,loc:"Tineo",sub:"May 6, 1:37 AM · wine philosophy",cx:202,cy:126,region:"Asturias",rc:"ra",
+   prev:"Wine under €2.50 — finish yourself. Local Tempranillo wins. No hangover.",
+   hl:["Surprisingly few wines with screw caps","Rule: wine under €2.50 — irrelevant whether finished in one sitting","A local Tempranillo won the contract","Non-drinking companion made him forget his limits","«These talks, like turning souls inside out in the coupe of a sleeper train»","Surprisingly, no hangover"],
+   cond:"Hangover-free. Pleased.",
+   quote:"«What would Christ do? Simple: if it's under 2.5€, then it's irrelevant if it's finished in one sit-down, or not»",
+   km:"Evening",togo:"~270 km"},
+
+  {num:11,loc:"Albergue de Borres",sub:"May 6, 11:07 AM · forgotten poncho",cx:188,cy:130,region:"Asturias",rc:"ra",
+   prev:"Забыл пончо! Fog like Borodino. Asturian cider. Werner Herzog.",
+   hl:["Deliberately placed poncho in view — then forgot it anyway","Fog rising from slopes: looks like Borodino in films","Clouds unthreatening — didn't go back. Will buy another.","«Sold either fashionable ones not covering the pack, or rubber wetsuits without the copper helmet»","Local cider poured from great height into low glass — must foam","Listened to Werner Herzog: «Why am I not like him? — Everything!»"],
+   cond:"Poncho-less. Philosophical. Drinking cider.",
+   quote:"«Почему я не такой как он, чего не хватает? — Всего!»",
+   km:"~20 km",togo:"~255 km"},
+
+  {num:12,loc:"Albergue de Borres",sub:"May 6, 11:52 PM · Germans at 1am",cx:187,cy:133,region:"Asturias",rc:"ra",
+   prev:"Немцы уходят в ночь. Lying alone. Hungry.",
+   hl:["Every night: roommates rise at 1am, rustle in the dark, leave practically before dawn","Sky cloudy — no sunrise ceremony","«По-моему эти люди часто немцы»","Lying almost alone in the dorm. Hungry."],
+   cond:"Alone. Hungry. Wondering.",
+   quote:"«Валяюсь уже почти один в казарме и удивляюсь. Голодно»",
+   km:"Night",togo:"~250 km"},
+
+  {num:13,loc:"Los Hospitales",sub:"May 7, 2:08 AM · THE fork",cx:177,cy:134,region:"Asturias",rc:"ra",
+   prev:"The fork: 24 km mountain route vs 14 km easy. Chooses 24.",
+   hl:["The defining moment of the trek","Hospitales Route: 24 km, high altitude, no signal, must carry water and food","Easy route: 14 km, all comforts","«Альтернатива 14 км, со всеми удобствами. Но это себя не уважать»","No rain gear. No water. No food. Got water. Set off.","«До встречи внизу»"],
+   cond:"Resolute. Slightly reckless.",
+   quote:"«Альтернатива 14 км, со всеми удобствами. Но это себя не уважать»",
+   km:"24 km chosen",togo:"~230 km"},
+
+  {num:14,loc:"Camino Primitivo, Allande",sub:"May 7, 3:59 AM · cappuccino fog",cx:166,cy:140,region:"Asturias",rc:"ra",
+   prev:"Adam & Hellen saved him. Valleys like cappuccino with fog.",
+   hl:["Adam and Hellen: bread + protein bar + tip of banana — saved him","«The valleys down below look like a cup of cappuccino with fog for the milk foam»","Merrill shoes for sale: gently worn"],
+   cond:"Hungry but lyrical.",
+   quote:"«The valleys down below look like a cup of cappuccino with fog for the milk foam»",
+   km:"Mountain path",togo:"~225 km"},
+
+  {num:15,loc:"Albergue de Berducedo",sub:"May 7, 10:48 AM · WE MADE IT",cx:156,cy:145,region:"Asturias",rc:"ra",
+   prev:"We fucking made it. Snowball gale. Dreamed of beer for 12 km.",
+   hl:["Made it: Sasha + Adam the Asturian + Hellen the Valencian","Hellen struggled most; Sasha on hind legs; Adam didn't stop talking","An hour from the end: gale, grass covered in snowballs","«The last 12 km I dreamed about beer; it never happened before; I'm becoming enlightened»","Ordered everything on the restaurant menu","PS: may have overdone the ordering"],
+   cond:"Victorious. Very full.",
+   quote:"«We fucking made it»",
+   km:"~24 km Hospitales route",togo:"~210 km"},
+
+  {num:16,loc:"Albergue de Berducedo",sub:"May 8, 1:18 AM · pig scare",cx:155,cy:147,region:"Asturias",rc:"ra",
+   prev:"Mission: waterproofing. Yesterday the pig didn't eat him — only scared him.",
+   hl:["Pilgrims from two albergues gather for breakfast at the better one","Mission of the day: find sporting goods, restore waterproofing","«Yesterday it's not as acute as yesterday, and yesterday the pig didn't eat me — only scared»"],
+   cond:"Cheerful. Philosophical about pigs.",
+   quote:"«Вчера свинья не съела, припугнула только»",
+   km:"Rest morning",togo:"~208 km"},
+
+  {num:17,loc:"La Mesa, Grandas de Salime",sub:"May 8, 3:46 AM · wetsuit rain",cx:144,cy:140,region:"Asturias",rc:"ra",
+   prev:"Walking like in a wet wetsuit. Tractor shelter. Given a poncho.",
+   hl:["Rain gear finally failed — walking like in a soaked wetsuit","«Чувства ошкурены, всё воспринимается в благоговейном экстазе — травки, коровки, туман»","Downpour → found tractor awning → sat on a stump among farm debris","Moved to a café — incredible encounters, stranger gives him a poncho"],
+   cond:"Soaked. Spiritually enlightened.",
+   quote:"«Чувства ошкурены, всё воспринимается в благоговейном экстазе»",
+   km:"~10 km",togo:"~198 km"},
+
+  {num:18,loc:"Embalse de Salime",sub:"May 8, 9:12 AM · lake & horses",cx:134,cy:143,region:"Asturias",rc:"ra",
+   prev:"1.5 km to shelter. Championship beauty despite rain. Horses loved him.",
+   hl:["Rain all day — «по красоте чемпионский»","Shared the trail with horses all day","«Лошади меня полюбили, седоки — ещё б…»","Beautiful reservoir in the mountains"],
+   cond:"Almost there. Enchanted.",
+   quote:"«Хоть большую часть дня моросил дождь, по красоте — чемпионский»",
+   km:"~15 km",togo:"~185 km"},
+
+  {num:19,loc:"Sierra La Cuesta",sub:"May 8, 1:28 PM · giant slugs",cx:127,cy:148,region:"Asturias",rc:"ra",
+   prev:"Coal-black giant slugs. Rolls into ball like a typewriter key.",
+   hl:["Asturian slugs: enormous, coal-black — like banana slugs in Oregon but black","Smooth near the head, ribbed further down","When scared, curls into a ball: «похож на шарик с буквами современных пишущих машинок»","Detailed naturalist observation mid-trek"],
+   cond:"Curious. Naturalist.",
+   quote:"«Когда он от страха сворачивается в шар, то становится похож на шарик с буквами современных пишущих машинок»",
+   km:"Afternoon",togo:"~180 km"},
+
+  {num:20,loc:"Malneira",sub:"May 9, 2:30 AM · existential crisis",cx:120,cy:153,region:"Asturias",rc:"ra",
+   prev:"Внезапно понял: стал обывателем. Coffee. Steinbeck. Poncho.",
+   hl:["Pre-dawn existential crisis: has he become an «обыватель» (ordinary person)?","The ordinary person avoids high civic feeling","Polonius = emblem of mediocrity and philistine vulgarity","Rain → fog → sun → everything chirped, mooed, clucked","Steinbeck in headphones, interrupted by Louisiana cheerleaders","Conclusion: life with Poncho is completely different from life without"],
+   cond:"Philosophical. Pre-dawn coffee.",
+   quote:"«Вот напьюсь кофе с чем бог послал и опять примусь за мечты о государственных смертях»",
+   km:"Dawn stop",togo:"~175 km"},
+
+  {num:21,loc:"Alto do Acevo",sub:"May 9, 6:36 AM · into Galicia",cx:110,cy:165,region:"Galicia",rc:"rg",
+   prev:"Crossed into Galicia. Met Andreas the bouncy German.",
+   hl:["Crossed the Asturias → Galicia border — felt a «tide going out»","Met Andreas (German, introduced himself as such)","Andreas: walking Porto → Santiago → Bilbao — for fun","Told him about food a few km ahead — answering Sasha's complaints","Offered to open a can of beer","«Хорошие люди — словно сговорились ломануться сюда»"],
+   cond:"Tired. Food ahead.",
+   quote:"«Хорошие люди они словно сговорились ломануться сюда»",
+   km:"Border crossing",togo:"~165 km"},
+
+  {num:22,loc:"Fonsagrada",sub:"May 9, 3:31 PM · devil's arrow",cx:99,cy:169,region:"Galicia",rc:"rg",
+   prev:"Devil's waymark arrow. Two old ladies. Magic word. Octopus.",
+   hl:["Last 9 km — tough terrain","Waymark arrow pointed sideways and down — didn't believe it","Shuffled downhill «without even cursing»","Two old ladies (one with umbrella) screamed: that's the devil's arrow!","The word «montañés» (mountain person) convinced him to climb","Lay on bunk. Ate octopus — recommended by Adam and Hellen"],
+   cond:"Made it. Octopus consumed.",
+   quote:"«Однако слово «монтанес» убедило меня»",
+   km:"~30 km",togo:"~155 km"},
+
+  {num:23,loc:"O Pan de Iria, Fonsagrada",sub:"May 10, 1:33 AM · bakery dawn",cx:97,cy:172,region:"Galicia",rc:"rg",
+   prev:"Galicia law: no blankets provided. Mountain fork chosen again.",
+   hl:["Law of Galicia: albergues don't provide blankets","Fork in road: flat or mountain — chooses mountain (can cut through and get lost)","Morning coffee at the bakery before setting off","Sky perfectly clear, bitter cold, fellow pilgrims file out like passport control"],
+   cond:"Energised. Pre-mountain.",
+   quote:"«Небо чище не бывает (скиснет конечно), колотун незаурядный»",
+   km:"Dawn start",togo:"~148 km"},
+
+  {num:24,loc:"Real Hospital de Montouto",sub:"May 10, 5:09 AM · thinking",cx:90,cy:175,region:"Galicia",rc:"rg",
+   prev:"You think I'm walking and not thinking. You're wrong. I'm thinking.",
+   hl:["Medieval pilgrim hospital at the mountain pass — functioning since 12th century","Walking and thinking deeply — about what? Next instalment.","Presumably: about Rome, Augustus, Trump, America"],
+   cond:"Walking. Thinking.",
+   quote:"«Вы наверное думаете что я иду по долинам и ничего не соображаю. Ошибаетесь. Я размышляю.»",
+   km:"Mountain pass",togo:"~140 km"},
+
+  {num:25,loc:"Cádabo",sub:"May 10, 12:31 PM · SPQR & beer",cx:83,cy:179,region:"Galicia",rc:"rg",
+   prev:"Bar. Beer. Finished SPQR. Augustus = Trump.",
+   hl:["Found a bar — hilarious menu negotiations","Locals bought him a round — had to reciprocate","Applied new Spanish words experimentally","Finished Mary Beard's SPQR","Augustus = Trump: «Our republic will fall to a talentless impersonator of Augustus»","New friends: cattle truck drivers whose trailer overturned — want to get him drunk"],
+   cond:"Drunk. Delighted.",
+   quote:"«Наша республика падёт под напором бездарного имперсонатора Августа»",
+   km:"Afternoon rest",togo:"~130 km"},
+
+  {num:26,loc:"Cádabo — albergue",sub:"Yesterday, 12:41 AM · СКОТСТВО",cx:81,cy:182,region:"Galicia",rc:"rg",
+   prev:"No outlets. Laptop fell asleep. СКОТСТВО!",
+   hl:["Only 2 outlets in the albergue — both in the kitchen, both ignored","Charged phone from laptop","Laptop fell into deep sleep and stopped charging","Woken at midnight by headphone sound","Waiting for 60% charge before can photograph, use maps","Listening to music: «можно обойтись»"],
+   cond:"Irritated. СКОТСТВО!",
+   quote:"«СКОТСТВО!»",
+   km:"Night",togo:"~128 km"},
+
+  {num:27,loc:"Castroverde",sub:"Yesterday, 3:57 AM · magnificent horses",cx:74,cy:185,region:"Galicia",rc:"rg",
+   prev:"Без гор скучно. But magnificent horses.",
+   hl:["Flat road: easy but boring","Without mountains it's easy but uninteresting","Two mares and a stallion in a meadow","Stallion with equipment of inhuman proportions","«Ох как я его понимаю» — solidarity"],
+   cond:"Philosophical. Equine solidarity.",
+   quote:"«Без гор легко но скучно. Зато лошади не такие пузатые и коротконогие»",
+   km:"Early morning",togo:"~110 km"},
+
+  {num:28,loc:"Fazai",sub:"Yesterday, 9:07 AM · cast iron backpack",cx:68,cy:189,region:"Galicia",rc:"rg",
+   prev:"Backpack like cast iron ingots. 1.5 hrs to Lugo.",
+   hl:["Flat road — easy","Backpack «as if someone stuffed it with cast iron ingots»","«Слышал про такие шутки» — didn't believe them","1.5 hours left to Lugo","Won't calculate the distance — won't help","«Свои чушки не тянут» — your own ingots don't drag"],
+   cond:"Grinding. Teeth clenched.",
+   quote:"«Свои чушки не тянут»",
+   km:"~3 km from Lugo",togo:"~45 km"},
+
+  {num:29,loc:"Lugo",sub:"Yesterday, 1:02 PM",cx:74,cy:183,region:"Galicia",rc:"rg",
+   prev:"Last 5 km: superhuman effort. Thunderstorm.",
+   hl:["Last 5 km required superhuman effort","Hit by torrential rain, thunder and lightning","Strange place — low scrubland, nowhere to shelter","Lugo: ancient Roman city, UNESCO World Heritage walls","«Думаю ещё и у...» — sentence trails off"],
+   cond:"Exhausted. Soaked. Made it.",
+   quote:"«Последние пять км потребовали нечеловеческих усилий»",
+   km:"~20 km walked",togo:"~40 km"},
+
+  {num:30,loc:"A Ponte Ferreira",sub:"Today · LATEST — 1h ago",cx:62,cy:198,region:"Galicia",rc:"rg",
+   prev:"Ноги болят везде. Adam, Hellen, Simon, Kris. Arriving Santiago Friday.",
+   hl:["Feet hurt everywhere — not blisters, but deep aching top to bottom","Considers staying a few days — but Camino ethics say no","Клод: among the ten pilgrim commandments: «do not rest» and «do not stop»","Only acceptable day to arrive in Santiago: Friday","Walked ~10 km. Met Adam and Hellen (Hellen's foot to the bone — going by taxi)","Simon caught up — also blistered, sprinted ahead","8 km with Belgian Kris: EU, USA, motorcycles, Belgian pensions","Albergue: three Russian companions with no connection to the Camino","Tibialis anterior muscle pain — front of shin, overuse injury","Recorded audio monologue about offence caused to Sokurov — uploading to cloud"],
+   cond:"Feet hurt everywhere. Spirit intact. ~20 km to go.",
+   quote:"«Кряхтя и почти не жалуясь я прополз десять км»",
+   km:"~10 km today",togo:"~20 km to Santiago 🎯"}
+];
+
+let visible = ALL;
+
+function filter(r, btn) {
+  document.querySelectorAll('.fb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  visible = r === 'all' ? ALL : ALL.filter(e => e.region === r);
+  renderList();
+  renderDots();
+}
+
+function renderDots() {
+  const g = document.getElementById('edots');
+  g.innerHTML = '';
+  ALL.forEach((e, i) => {
+    const isLast = i === ALL.length - 1;
+    const show = visible.includes(e);
+    const col = e.region === 'Madrid' ? '#b8860b' : isLast ? '#2e7d52' : '#c0392b';
+
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', e.cx); c.setAttribute('cy', e.cy);
+    c.setAttribute('r', isLast ? 9 : e.region === 'Madrid' ? 7 : 5.5);
+    c.setAttribute('fill', show ? col : '#bbb');
+    c.setAttribute('stroke', 'white');
+    c.setAttribute('stroke-width', '1.5');
+    c.style.cursor = 'pointer';
+    c.style.opacity = show ? '1' : '0.3';
+    c.addEventListener('mouseenter', ev => showTip(ev, e));
+    c.addEventListener('mouseleave', hideTip);
+    c.addEventListener('click', () => showModal(i));
+    g.appendChild(c);
+
+    if (show) {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', e.cx); t.setAttribute('y', e.cy + 4);
+      t.setAttribute('font-size', isLast ? '8' : '6.5');
+      t.setAttribute('fill', 'white');
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('font-weight', '500');
+      t.textContent = e.num;
+      g.appendChild(t);
+    }
+
+    if (isLast) {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      p.setAttribute('cx', e.cx); p.setAttribute('cy', e.cy);
+      p.setAttribute('r', '9'); p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', '#2e7d52'); p.setAttribute('stroke-width', '1.8');
+      p.innerHTML = '<animate attributeName="r" values="9;22;9" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"/>';
+      g.appendChild(p);
+    }
+  });
+}
+
+function renderList() {
+  document.getElementById('elist').innerHTML = visible.map(e => `
+    <div class="ec${e.num === 30 ? ' active' : ''}" onclick="showModal(${ALL.indexOf(e)})">
+      <div class="ec-top">
+        <div class="nb${e.num === 30 ? ' cur' : ''}">${e.num}</div>
+        <span class="en">${e.loc}</span>
+        <span class="rp ${e.rc}">${e.region}</span>
+      </div>
+      <div class="esub">${e.sub}</div>
+      <div class="eprev">${e.prev.slice(0, 65)}…</div>
+    </div>`).join('');
+}
+
+function showModal(i) {
+  const e = ALL[i];
+  const isLast = i === ALL.length - 1;
+  document.getElementById('m-num').textContent = e.num;
+  document.getElementById('m-num').className = 'modal-num' + (isLast ? ' cur' : '');
+  document.getElementById('m-loc').textContent = e.loc;
+  document.getElementById('m-sub').innerHTML = `<span class="rp ${e.rc}">${e.region}</span> &nbsp;${e.sub}`;
+  document.getElementById('m-body').innerHTML = `
+    <div class="stats-row">
+      <div class="mstat"><span class="mstat-val">${e.km}</span><span class="mstat-lbl">distance</span></div>
+      <div class="mstat"><span class="mstat-val${isLast ? ' go' : ''}">${e.togo}</span><span class="mstat-lbl">to Santiago</span></div>
+    </div>
+    <p class="section-label">Highlights</p>
+    <ul class="highlights">${e.hl.map(h => `<li>${h}</li>`).join('')}</ul>
+    <p class="section-label">Condition</p>
+    <p class="cond-text">${e.cond}</p>
+    <p class="section-label">Quote</p>
+    <blockquote class="modal-quote${isLast ? ' cur-q' : ''}">${e.quote}</blockquote>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+document.getElementById('modal').addEventListener('click', function(ev) {
+  if (ev.target === this) closeModal();
+});
+
+function showTip(ev, e) {
+  const t = document.getElementById('tip');
+  const r = document.getElementById('map-panel').getBoundingClientRect();
+  t.innerHTML = `<strong>${e.num}. ${e.loc}</strong><span>${e.sub}</span>`;
+  t.style.display = 'block';
+  t.style.left = (ev.clientX - r.left + 12) + 'px';
+  t.style.top = (ev.clientY - r.top - 50) + 'px';
+}
+function hideTip() { document.getElementById('tip').style.display = 'none'; }
+
+renderDots();
+renderList();
+</script>
+
+
+</body></html>
